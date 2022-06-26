@@ -1,0 +1,19 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+<script type="text/javascript" id="myscript">
+  var socket = new WebSocket("wss://domain:1337/ws");
+
+  socket.onmessage = function (e) {
+    console.log(e)
+    document.getElementById("out").innerHTML += decrypt(e.data, document.getElementById("password").value) + " <br>\n";
+  };
+
+  function decrypt(c, p) {
+    return CryptoJS.AES.decrypt(c, p).toString(CryptoJS.enc.Utf8);
+  }
+</script>
+
+<body>
+  <input type="text" id="password" placeholder="password">
+  <div id="out">
+  </div>
+</body>

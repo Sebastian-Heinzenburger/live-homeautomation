@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/index.css">
+  <title> Rolladensoftware - Sicher TM</title>
+</head>
+
+<script type="text/javascript" id="myscript">
+  var socket = new WebSocket("wss://domain:1337/ws");
+
+  function encrypt() {
+    document.getElementById("payload").value = CryptoJS.AES.encrypt("CMD" + new Date().getTime() + ":" + document.getElementById("command").value, document.getElementById("password").value);
+  }
+
+  function send(e) {
+    if (e && e.key !== "Enter")
+      return
+    encrypt(); focus();
+    socket.send(document.getElementById("payload").value);
+    document.getElementById("command").value = "";
+  }
+
+  function focus() {
+    document.getElementById("command").focus();
+  }
+</script>
+
+<body>
+  <form method="">
+    <h2 id="h">Enter Command</h2>
+    <input id="command" onchange="encrypt()" onkeypress="send(event)" placeholder="Befehl" type="text" autofocus>
+    <input id="password" onchange="encrypt()" onkeypress="send(event)" placeholder="Kennwort" type="text">
+    <input id="payload" name="payload" type="hidden">
+    <button type="button" onclick="send()">send</button>
+  </form>
+</body>
+
+</html>
